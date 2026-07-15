@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Jornada — Dr. Lorenci</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #16202b; }
+  .stage {
+    position: relative; width: 100%; height: 100%;
+    font-family: 'Inter', sans-serif; text-align: center; user-select: none;
+  }
+  .jscene {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4.5%;
+    padding: 6% 8%; opacity: 0; transform: translateY(14px);
+    transition: opacity 1s ease, transform 1s ease; pointer-events: none;
+  }
+  .jscene.on { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .jscene h3 {
+    font-family: 'Playfair Display', serif; font-weight: 500;
+    font-size: clamp(15px, 4.6vw, 34px); line-height: 1.4; color: #fff; max-width: 88%;
+  }
+  .jscene p { font-size: clamp(10px, 2.2vw, 15px); color: rgba(255,255,255,.6); max-width: 80%; line-height: 1.7; }
+  .jaccent { color: #C98B5E; }
+  .jclock {
+    width: 17%; aspect-ratio: 1; max-width: 64px;
+    border: 2px solid rgba(255,255,255,.25); border-radius: 50%; position: relative;
+  }
+  .jclock::after {
+    content: ''; position: absolute; left: 50%; top: 50%; width: 2px; height: 38%;
+    background: #C98B5E; transform-origin: top center; animation: jtick 4s linear infinite;
+  }
+  @keyframes jtick { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  .jscene-final { background: linear-gradient(180deg, #16202b 0%, #1E2B38 100%); }
+  .jfoto {
+    width: 15%; aspect-ratio: 1; max-width: 108px; border-radius: 50%;
+    overflow: hidden; border: 3px solid #C98B5E;
+  }
+  .jfoto img { width: 100%; height: 100%; object-fit: cover; object-position: 80% top; }
+  .jbtn {
+    display: inline-block; font-weight: 600; font-size: clamp(10px, 2.4vw, 15px);
+    color: #fff; background: #C98B5E; padding: 0.9em 2em; border-radius: 8px; text-decoration: none;
+  }
+  .jdots { position: absolute; bottom: 5%; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; }
+  .jdots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.2); transition: background .4s; }
+  .jdots span.on { background: #C98B5E; }
+</style>
+</head>
+<body>
+<div class="stage" id="jstage">
+  <div class="jscene on">
+    <div class="jclock"></div>
+    <h3>Você entra no consultório.<br>Mal se senta… <span class="jaccent">e o relógio já dita o fim do seu tempo.</span></h3>
+  </div>
+  <div class="jscene">
+    <h3>Uma receita rápida.<br>Um aperto de mão frio.<br><span class="jaccent">A porta se fecha.</span></h3>
+  </div>
+  <div class="jscene">
+    <h3>E o que você realmente sentia?</h3>
+    <p>Ninguém perguntou. O sintoma foi mascarado — a causa continua lá.</p>
+  </div>
+  <div class="jscene">
+    <h3><span class="jaccent">Existe outro caminho.</span></h3>
+    <p>Um médico que ouve, investiga e caminha com você — sem pressa, sem julgamentos.</p>
+  </div>
+  <div class="jscene">
+    <h3>Quando alguém finalmente te escuta,<br><span class="jaccent">a sua saúde muda de direção.</span></h3>
+  </div>
+  <div class="jscene jscene-final">
+    <div class="jfoto"><img src="dr-luiz-foto.png" alt="Dr. Luiz Fernando Lorenci"></div>
+    <h3>Você merece um atendimento que valorize <span class="jaccent">tudo que é importante para você!</span></h3>
+    <a class="jbtn" href="https://agendamento.clinicalorenci.com.br" target="_blank" rel="noopener">Marque a sua consulta</a>
+  </div>
+  <div class="jdots" id="jdots"></div>
+</div>
+<script src="../content.js"></script>
+<script>
+(function(){
+  var scenes = document.querySelectorAll('.jscene');
+  if (window.SITE_CONTENT && SITE_CONTENT.jornada) {
+    SITE_CONTENT.jornada.forEach(function (s, k) {
+      if (!scenes[k]) return;
+      var h = scenes[k].querySelector('h3'), p = scenes[k].querySelector('p');
+      if (h && s.h) h.innerHTML = s.h;
+      if (p && s.p) p.innerHTML = s.p;
+    });
+  }
+  var dotsWrap = document.getElementById('jdots');
+  var durations = [5000, 4500, 5000, 5000, 4500, 9000];
+  scenes.forEach(function(_, i){
+    var d = document.createElement('span');
+    if (i === 0) d.className = 'on';
+    dotsWrap.appendChild(d);
+  });
+  var i = 0;
+  function next(){
+    scenes[i].classList.remove('on');
+    dotsWrap.children[i].classList.remove('on');
+    i = (i + 1) % scenes.length;
+    scenes[i].classList.add('on');
+    dotsWrap.children[i].classList.add('on');
+    setTimeout(next, durations[i]);
+  }
+  setTimeout(next, durations[0]);
+})();
+</script>
+</body>
+</html>
