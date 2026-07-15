@@ -1,0 +1,14 @@
+# Dependências do Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Sistema operacional / editores
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Miniatura interna da ferramenta de design (não faz parte do site)
+.thumbnail
