@@ -1,0 +1,9 @@
+# Sistema operacional / editores
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Miniatura interna da ferramenta de design (não faz parte do site)
+.thumbnail
