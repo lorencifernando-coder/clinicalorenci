@@ -1,0 +1,54 @@
+# ══════════════════════════════════════════════════════════════
+#  Windows em VM na VPS — acesso via navegador e RDP
+#  (projeto dockur/windows: QEMU/KVM dentro de container)
+#  ------------------------------------------------------------------
+#  PRÉ-REQUISITOS (verificar ANTES de subir — Fase 9 da missão):
+#   1. KVM disponível na VPS:  ls /dev/kvm  (se não existir, o Windows
+#      roda em emulação por software = LENTO DEMAIS; nesse caso, avaliar
+#      trocar o plano da VPS ou desistir deste serviço nesta máquina)
+#   2. Recursos livres: mínimo 4 GB de RAM e 64 GB de disco LIVRES além
+#      do que Coolify/MySQL/site/agendamento/n8n já usam.
+#   3. Licença: o Windows instala sem chave (avaliação), mas para uso
+#      contínuo é preciso ativar com uma licença válida do Luiz.
+#
+#  ACESSO:
+#   - Navegador (instalação e uso): http://localhost:8006 via túnel SSH:
+#       ssh -L 8006:localhost:8006 root@76.13.169.14
+#   - RDP (melhor experiência / apps específicas):
+#       ssh -L 3389:localhost:3389 root@76.13.169.14
+#       e conectar o cliente RDP em localhost:3389
+#   - NUNCA exponha 8006/3389 direto na internet. Se quiser acesso sem
+#     túnel SSH, use VPN (WireGuard/Tailscale) ou proteja o 8006 atrás
+#     do Traefik com autenticação.
+#
+#  APPS ESPECÍFICAS VIA RDP (RemoteApp): dentro do Windows, publique os
+#  programas desejados via RemoteApp (RDS) ou use um cliente como o
+#  mstsc/Remmina apontando direto para o app configurado.
+# ══════════════════════════════════════════════════════════════
+services:
+  windows:
+    image: dockurr/windows
+    container_name: windows-vm
+    restart: unless-stopped
+    stop_grace_period: 2m
+    environment:
+      VERSION: "11"            # "11" | "10" | "2022" (Server) etc.
+      RAM_SIZE: "4G"
+      CPU_CORES: "2"
+      DISK_SIZE: "64G"
+      USERNAME: "lorenci"
+      PASSWORD: "${WINDOWS_PASSWORD}"   # defina forte: openssl rand -base64 18
+      LANGUAGE: "Portuguese"
+      REGION: "pt-BR"
+      KEYBOARD: "pt-BR"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "127.0.0.1:8006:8006"        # visor web (instalação/uso pelo navegador)
+      - "127.0.0.1:3389:3389/tcp"    # RDP
+      - "127.0.0.1:3389:3389/udp"
+    volumes:
+      - ./windows-data:/storage

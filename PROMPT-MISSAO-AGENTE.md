@@ -263,6 +263,63 @@ poluir a agenda), ou renomeie para "[TESTE]".
 3. Entregue explicitamente: **a senha do painel de pedidos é o `ADMIN_TOKEN`
    definido na Fase 2** — diga ao Luiz para guardá-la no gerenciador de senhas.
 
+## FASE 9 — Novos serviços na VPS (n8n + Windows/RDP)
+
+Os arquivos de referência estão em `infra/` neste repositório. **Antes de
+subir qualquer um, verifique recursos**: `free -h`, `df -h`, `nproc` — os
+serviços existentes (Coolify, MySQL, agendamento, site) têm prioridade; se a
+VPS não tiver folga (ver mínimos abaixo), reporte ao Luiz em vez de subir.
+
+### 9a. n8n autohospedado
+
+1. Coolify → New Resource → **Service → n8n** (one-click; ou use
+   `infra/n8n.docker-compose.yml` como referência).
+2. DNS: registro A `n8n` → `76.13.169.14`; domínio
+   `n8n.clinicalorenci.com.br` + SSL no app.
+3. Gere e guarde a `N8N_ENCRYPTION_KEY` (`openssl rand -hex 24`) — sem ela
+   os credentials do n8n são irrecuperáveis. Entregue ao Luiz junto com o
+   usuário admin criado no primeiro acesso.
+4. **Cadastre as chaves do Luiz como Credentials no cofre do n8n** (valores
+   no arquivo de segredos do Drive): token do Mercado Pago (header auth),
+   `AGENDAMENTO_SHARED_SECRET` (para chamar as funções Base44/Vesper) e o
+   que mais os fluxos pedirem. Nunca em nós hardcoded — sempre Credentials.
+5. Integre com o agendamento: crie um workflow com **Webhook trigger** e
+   adicione a URL dele ao `OUTBOUND_WEBHOOKS` do app agendamento no Coolify
+   (é lista separada por vírgula — **acrescente**, não substitua a URL do
+   Vesper). Teste: um agendamento novo deve disparar o workflow com o evento
+   `lead_criado`.
+6. **Hermes:** o Luiz pediu "o Hermes como agente integrado ao n8n", mas a
+   especificação exata ainda não foi confirmada (projeto/link). PERGUNTE ao
+   Luiz o que é o Hermes antes de instalar qualquer coisa com esse nome.
+   Não instale por adivinhação (regra R6).
+
+### 9b. Área de trabalho remota — Windows em VM (navegador + RDP)
+
+> Decisão do Luiz: Windows (não macOS — macOS em VPS não-Apple viola a
+> licença da Apple e está fora do escopo).
+
+1. **Pré-cheque obrigatório:** `ls /dev/kvm` na VPS. Sem KVM, a VM roda em
+   emulação por software (inutilizável) — nesse caso reporte e pare esta
+   sub-fase. Verifique também ≥4 GB de RAM e ≥64 GB de disco LIVRES.
+2. Suba com `infra/windows-vm.docker-compose.yml` (dockur/windows):
+   defina `WINDOWS_PASSWORD` forte, portas apenas em `127.0.0.1`.
+3. Instalação inicial pelo visor web via túnel SSH
+   (`ssh -L 8006:localhost:8006 root@76.13.169.14` → http://localhost:8006).
+4. Acesso do dia a dia por **RDP via túnel SSH** (ou configure
+   WireGuard/Tailscale para o Luiz se ele quiser acesso sem terminal —
+   pergunte). **Nunca** exponha 3389/8006 diretamente na internet.
+5. Para "aplicações específicas via RDP": dentro do Windows, publique os
+   programas como RemoteApp, ou configure o cliente RDP do Luiz para abrir
+   direto o aplicativo.
+6. Licença: informe ao Luiz que o Windows roda em modo avaliação até ativar
+   com uma licença válida dele.
+
+**Testes da fase:** n8n abre no domínio com SSL e o workflow de webhook
+recebe `lead_criado` de um agendamento de teste; Windows acessível pelo
+visor web e por RDP via túnel; nenhum dos serviços novos derrubou os
+existentes (site, agendamento e MySQL seguem respondendo — re-rode os testes
+das Fases 1 e 4).
+
 ---
 
 ## Checklist final (tudo precisa estar ✅ para a missão terminar)
@@ -279,3 +336,7 @@ poluir a agenda), ou renomeie para "[TESTE]".
 - [ ] `webhook_events` > 0 no banco
 - [ ] Preço revertido para R$ 350 e dados de teste marcados
 - [ ] Backup pós-mudança no Drive + relatório entregue
+- [ ] n8n no ar com SSL, credentials cadastradas e webhook recebendo eventos do agendamento
+- [ ] Hermes: especificação confirmada com o Luiz (instalar só depois disso)
+- [ ] Windows VM acessível via navegador e RDP (túnel), sem portas expostas na internet
+- [ ] Serviços existentes re-testados após os novos (nada degradou)
