@@ -1,0 +1,33 @@
+# ══════════════════════════════════════════════════════════════
+#  n8n autohospedado — VPS Clínica Lorenci (Coolify)
+#  ------------------------------------------------------------------
+#  Preferencial: usar o serviço one-click "n8n" do próprio Coolify
+#  (New Resource → Service → n8n), que já cuida de domínio/SSL.
+#  Este compose é o equivalente manual, para referência ou uso direto.
+#
+#  Antes de subir:
+#   1. Gere N8N_ENCRYPTION_KEY:  openssl rand -hex 24
+#      (guarde no gerenciador de senhas — sem ela os credentials salvos
+#       no n8n ficam ilegíveis para sempre)
+#   2. Crie o subdomínio n8n.clinicalorenci.com.br (A → 76.13.169.14)
+#      e configure domínio+SSL no Coolify/Traefik.
+# ══════════════════════════════════════════════════════════════
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5678:5678"   # só localhost — exposição pública é via Traefik/Coolify com SSL
+    environment:
+      - N8N_HOST=n8n.clinicalorenci.com.br
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://n8n.clinicalorenci.com.br/
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_DIAGNOSTICS_ENABLED=false
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
