@@ -1,0 +1,14 @@
+# Não copiar para a imagem Docker
+node_modules/
+npm-debug.log*
+.git/
+.gitignore
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.thumbnail
+
+# Exports pesados que não fazem parte do site publicado
+Site Dr Lorenci - offline.html
+Site Dr Lorenci - para Lovable.html

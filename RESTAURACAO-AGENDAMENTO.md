@@ -42,6 +42,39 @@ dados e segredos, e a hospedagem compartilhada não roda Node).
 4. Para trocar o destino dos botões "Agendar Consulta", procure
    `agendamento.clinicalorenci.com.br` no `index.html`.
 
+## 3.1 Deploy do site na VPS/Coolify (caminho escolhido — tudo num lugar só)
+
+Decisão: rodar o **site também na VPS**, ao lado do agendamento, com deploy
+automático por git (acaba o upload manual — que foi a origem dos bugs de
+acento/subpáginas/vídeos). O repositório já está pronto: tem `server.js`
+(Express), `Dockerfile` e `package.json`. O `server.js` serve tudo com charset
+UTF-8, MIME correto de `.jsx` e URLs amigáveis (`/admin`,
+`/politica-de-privacidade`) — verificado.
+
+**Passos no Coolify (VPS `76.13.169.14`):**
+
+1. **New Resource → Application** → origem: repositório GitHub
+   `lorencifernando-coder/clinicalorenci`, branch `main`
+   (depois de o PR ser mergeado).
+2. **Build Pack: Dockerfile** (o Coolify detecta o `Dockerfile` na raiz).
+3. **Porta: 3000** (o `EXPOSE` do Dockerfile). O Coolify injeta a env `PORT`;
+   o `server.js` a respeita.
+4. **Deploy** e teste primeiro pela **URL temporária do Coolify**
+   (`*.sslip.io`) — confirme home, `/admin`, `/politica-de-privacidade` e os
+   vídeos.
+5. **Domínio:** adicione `clinicalorenci.com.br` e `www.clinicalorenci.com.br`
+   no app; deixe o Coolify emitir o **SSL** (Traefik/Let's Encrypt).
+6. **DNS:** aponte o registro **A** de `clinicalorenci.com.br` (e `www`) para
+   **`76.13.169.14`**. Hoje eles apontam para a hospedagem compartilhada —
+   troque **só depois** que o app estiver testado no Coolify (evita site fora
+   do ar). Propagação pode levar alguns minutos/horas.
+7. **Auto-deploy:** ative o webhook do GitHub no app do Coolify para que cada
+   `git push` na `main` redeploye sozinho.
+
+> Depois disso, a hospedagem compartilhada deixa de servir o site. O
+> `.htaccess` continua no repositório (ignorado pelo Node) — só volta a valer
+> se um dia você reusar a hospedagem estática.
+
 ## 4. Restaurar o subdomínio de agendamento (VPS + Coolify)
 
 O link não abre porque o subdomínio não está resolvendo. Verifique nesta ordem:
