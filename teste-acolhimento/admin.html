@@ -38,6 +38,20 @@
   .salvar small { color:rgba(255,255,255,.6); font-size:12.5px; line-height:1.5; }
   .ok { color:#7fc98b !important; }
 
+  /* ── Interruptores (Configurações da Página) ──────────────── */
+  .chaves { display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; }
+  @media (max-width:640px){ .chaves { grid-template-columns:1fr; } }
+  .chave { display:flex; align-items:center; justify-content:space-between; gap:12px;
+           background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:10px 14px; }
+  .chave span { font-size:13.5px; color:var(--ink); }
+  .chave small { display:block; font-size:11.5px; color:#8a94a0; }
+  .chave input { appearance:none; width:42px; height:24px; border-radius:12px; background:#cfc8bc;
+                 position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
+  .chave input:checked { background:var(--cta); }
+  .chave input::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px;
+                        border-radius:50%; background:#fff; transition:left .2s; }
+  .chave input:checked::after { left:21px; }
+
   /* ── Aba Pedidos & Pagamentos ─────────────────────────────── */
   .resumo { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-bottom:20px; }
   .resumo .cartao { background:var(--card); border:1px solid var(--border); border-top:4px solid var(--cta); border-radius:10px; padding:14px; text-align:center; }
@@ -101,6 +115,22 @@
       <button type="button" data-cmd="insertOrderedList">1. Lista</button>
     </div>
     <div id="editorPriv" contenteditable="true"></div>
+  </div>
+  <div class="bloco">
+    <h2>Configurações da Página</h2>
+    <p class="dica">Ligue ou desligue cada bloco da página. As mudanças valem após baixar o <b>content.js</b> e substituí-lo no servidor — igual às frases da Jornada.</p>
+    <div class="chaves" id="chavesConfig">
+      <label class="chave"><span>Vídeo flutuante "A Jornada"<small>mini-player no canto, aparece ao rolar</small></span><input type="checkbox" data-cfg="videoFlutuante"></label>
+      <label class="chave"><span>Vídeo estático do burnout<small>moldura de celular no meio da página</small></span><input type="checkbox" data-cfg="videoBurnout" data-tipo="secao"></label>
+      <label class="chave"><span>Botão flutuante do WhatsApp</span><input type="checkbox" data-cfg="whatsappFlutuante"></label>
+      <label class="chave"><span>Cartão do médico<small>foto + CRM</small></span><input type="checkbox" data-cfg="medico" data-tipo="secao"></label>
+      <label class="chave"><span>"Você se identifica?"</span><input type="checkbox" data-cfg="identifica" data-tipo="secao"></label>
+      <label class="chave"><span>Cuidado Integral</span><input type="checkbox" data-cfg="cuidadoIntegral" data-tipo="secao"></label>
+      <label class="chave"><span>Método de Atendimento</span><input type="checkbox" data-cfg="metodo" data-tipo="secao"></label>
+      <label class="chave"><span>Frases da Jornada<small>seção com as frases editadas acima</small></span><input type="checkbox" data-cfg="jornada" data-tipo="secao"></label>
+      <label class="chave"><span>Consulta Online</span><input type="checkbox" data-cfg="consultaOnline" data-tipo="secao"></label>
+      <label class="chave"><span>Depoimentos</span><input type="checkbox" data-cfg="depoimentos" data-tipo="secao"></label>
+    </div>
   </div>
 </div>
 
@@ -168,6 +198,23 @@
   });
   var editor = document.getElementById('editorPriv');
   editor.innerHTML = C.privacidade || '';
+
+  // Configurações da Página: sem config salva, tudo começa LIGADO.
+  var cfgSalva = C.config || {};
+  var secoesSalvas = cfgSalva.secoes || {};
+  document.querySelectorAll('#chavesConfig input[data-cfg]').forEach(function (chk) {
+    var valor = chk.dataset.tipo === 'secao' ? secoesSalvas[chk.dataset.cfg] : cfgSalva[chk.dataset.cfg];
+    chk.checked = valor !== false;
+  });
+
+  function lerConfig() {
+    var config = { secoes: {} };
+    document.querySelectorAll('#chavesConfig input[data-cfg]').forEach(function (chk) {
+      if (chk.dataset.tipo === 'secao') config.secoes[chk.dataset.cfg] = chk.checked;
+      else config[chk.dataset.cfg] = chk.checked;
+    });
+    return config;
+  }
   document.querySelectorAll('.toolbar button').forEach(function (b) {
     b.addEventListener('click', function () {
       if (b.dataset.cmd) document.execCommand(b.dataset.cmd, false, null);
@@ -182,7 +229,7 @@
         p: document.querySelector('textarea[data-i="' + i + '"][data-k="p"]').value
       };
     });
-    var out = 'window.SITE_CONTENT = ' + JSON.stringify({ jornada: jornada, privacidade: editor.innerHTML }, null, 2) + ';\n';
+    var out = 'window.SITE_CONTENT = ' + JSON.stringify({ jornada: jornada, privacidade: editor.innerHTML, config: lerConfig() }, null, 2) + ';\n';
     var blob = new Blob([out], { type: 'text/javascript' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
