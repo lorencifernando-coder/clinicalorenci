@@ -22,7 +22,7 @@
     --cta-pale: #F5E8E2;
     --border: #E2DDD6;
   }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior:smooth; }
   body {
     font-family:'Inter',Arial,sans-serif;
     background:var(--bg);
@@ -33,17 +33,15 @@
     padding:32px 16px 96px;
   }
   main { width:100%; max-width:560px; display:flex; flex-direction:column; gap:28px; }
-
   h1, h2 { font-family:'Playfair Display',Georgia,serif; color:var(--ink); }
   .centro { text-align:center; }
+  [hidden] { display:none !important; }
 
-  /* Cabeçalho */
   .topo img.crest { height:64px; margin:0 auto 14px; display:block; }
   .topo h1 { font-size:clamp(26px,6vw,34px); line-height:1.25; margin-bottom:10px; }
   .topo h1 em { font-style:normal; color:var(--cta); }
   .topo .sub { color:var(--muted); font-size:14.5px; }
 
-  /* Cartões */
   .cartao {
     background:var(--card);
     border:1px solid var(--border);
@@ -54,26 +52,26 @@
   .cartao p { font-size:14.5px; color:var(--ink-soft); }
   .cartao p + p { margin-top:10px; }
 
-  /* Médico */
   .medico { display:flex; gap:18px; align-items:center; }
   .medico img { width:92px; height:92px; border-radius:50%; object-fit:cover; object-position:center 20%; border:3px solid var(--cta-pale); flex-shrink:0; }
   .medico .nome { font-family:'Playfair Display',serif; font-size:18px; }
   .medico .crm { font-size:12.5px; color:var(--muted); margin-top:2px; }
   .medico .desc { font-size:13.5px; color:var(--ink-soft); margin-top:8px; }
 
-  /* Lista de dores */
   .dores { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:6px; }
   .dores li {
-    background:var(--cta-pale);
-    border-radius:10px;
-    padding:12px 14px;
-    font-size:14px;
-    color:var(--ink);
-    display:flex; gap:10px; align-items:flex-start;
+    background:var(--cta-pale); border-radius:10px; padding:12px 14px;
+    font-size:14px; display:flex; gap:10px; align-items:flex-start;
   }
   .dores li::before { content:'—'; color:var(--cta); font-weight:700; }
+  .dores li strong { font-weight:600; }
 
-  /* Como funciona (passos, eco das bolinhas da acolhimento) */
+  .grade2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px; }
+  @media (max-width:520px){ .grade2 { grid-template-columns:1fr; } }
+  .grade2 .item { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:14px; }
+  .grade2 .item strong { display:block; font-size:14px; margin-bottom:4px; }
+  .grade2 .item span { font-size:13px; color:var(--ink-soft); }
+
   .passos { display:flex; flex-direction:column; gap:14px; margin-top:6px; }
   .passo { display:flex; gap:14px; align-items:flex-start; }
   .passo .num {
@@ -85,47 +83,79 @@
   .passo strong { display:block; font-size:14.5px; }
   .passo span { font-size:13.5px; color:var(--ink-soft); }
 
-  /* Depoimento */
-  .depo { border-left:3px solid var(--cta); padding-left:16px; font-style:italic; color:var(--ink-soft); font-size:14.5px; }
-  .depo footer { font-style:normal; font-size:12.5px; color:var(--muted); margin-top:8px; }
+  /* Vídeo estático (burnout) em moldura de celular */
+  .fone {
+    width:min(280px,80%); aspect-ratio:9/16; margin:14px auto 0;
+    border:10px solid var(--ink); border-radius:36px; overflow:hidden;
+    background:#16202b; box-shadow:0 14px 34px rgba(30,43,56,.22);
+  }
+  .fone iframe { width:100%; height:100%; border:0; pointer-events:none; }
 
-  /* CTA */
+  /* Jornada — frases do content.js */
+  .jornada-frases { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+  .jfrase {
+    background:var(--bg); border-left:3px solid var(--cta); border-radius:0 10px 10px 0;
+    padding:12px 16px; font-family:'Playfair Display',serif; font-size:15.5px; line-height:1.5;
+  }
+  .jfrase .japoio { display:block; font-family:'Inter',sans-serif; font-size:12.5px; color:var(--muted); margin-top:6px; }
+  .jaccent { color:var(--cta); }
+
+  .depo { border-left:3px solid var(--cta); padding-left:16px; font-style:italic; color:var(--ink-soft); font-size:14px; }
+  .depo + .depo { margin-top:16px; }
+  .depo footer { font-style:normal; font-size:12px; color:var(--muted); margin-top:6px; }
+
   .btn {
     display:block; width:100%; text-align:center;
     background:var(--cta); color:#fff; text-decoration:none;
     font-weight:700; font-size:15.5px;
-    padding:16px 20px; border-radius:12px;
-    transition:background .2s;
+    padding:16px 20px; border-radius:12px; transition:background .2s;
   }
   .btn:hover { background:var(--cta-hover); }
   .btn-nota { text-align:center; font-size:12.5px; color:var(--muted); margin-top:10px; }
 
-  /* Rodapé */
   .rodape { text-align:center; font-size:12.5px; color:var(--muted); line-height:1.8; }
   .rodape a { color:var(--muted); }
 
   /* WhatsApp flutuante */
   .wa {
-    position:fixed; right:18px; bottom:18px; z-index:50;
+    position:fixed; right:18px; bottom:18px; z-index:60;
     width:54px; height:54px; border-radius:50%;
     background:#25D366; display:flex; align-items:center; justify-content:center;
     box-shadow:0 4px 14px rgba(0,0,0,.18);
   }
   .wa svg { width:28px; height:28px; fill:#fff; }
+
+  /* Mini-player flutuante da Jornada (aparece após rolar o topo) */
+  .mini-jornada {
+    position:fixed; left:18px; bottom:18px; z-index:60;
+    width:132px; aspect-ratio:9/16;
+    border-radius:18px; overflow:hidden;
+    box-shadow:0 10px 26px rgba(30,43,56,.32);
+    border:3px solid var(--card);
+    opacity:0; transform:translateY(16px); pointer-events:none;
+    transition:opacity .35s, transform .35s;
+  }
+  .mini-jornada.visivel { opacity:1; transform:none; pointer-events:auto; }
+  .mini-jornada iframe { width:100%; height:100%; border:0; }
+  .mini-jornada .fechar {
+    position:absolute; top:4px; right:4px; z-index:2;
+    width:22px; height:22px; border-radius:50%; border:0; cursor:pointer;
+    background:rgba(30,43,56,.72); color:#fff; font-size:13px; line-height:1;
+  }
 </style>
 </head>
 <body>
 <main>
 
-  <header class="topo centro">
+  <header class="topo centro" data-secao="hero">
     <img class="crest" src="../assets/crest-icon.png" alt="LFL Cuidado e Saúde">
     <h1>Quando foi a última vez que um médico <em>realmente te ouviu?</em></h1>
     <p class="sub">Dr. Luiz Fernando Lorenci · Online para todo o Brasil</p>
   </header>
 
-  <a class="btn" href="https://agendamento.clinicalorenci.com.br">Agendar Consulta de Acolhimento</a>
+  <a class="btn" href="https://agendamento.clinicalorenci.com.br" data-secao="ctaTopo">Agendar Consulta de Acolhimento</a>
 
-  <section class="cartao">
+  <section class="cartao" data-secao="medico">
     <div class="medico">
       <img src="../assets/dr-luiz-foto.png" alt="Dr. Luiz Fernando Lorenci">
       <div>
@@ -136,39 +166,61 @@
     </div>
   </section>
 
-  <section class="cartao">
+  <section class="cartao" data-secao="identifica">
     <h2>Você se identifica?</h2>
     <ul class="dores">
-      <li>Consultas de 15 minutos que terminam antes de você conseguir explicar o que sente</li>
-      <li>Esgotamento e burnout que ninguém investiga a fundo</li>
-      <li>Ansiedade e sono ruim tratados só com receita rápida</li>
-      <li>A sensação de que o sintoma foi mascarado — e a causa continua lá</li>
+      <li><span><strong>Consulta de 15 minutos não resolve</strong> — termina antes de você conseguir explicar o que sente</span></li>
+      <li><span><strong>Quer ser ouvido de verdade</strong> — sem receita rápida e porta se fechando</span></li>
+      <li><span><strong>Burnout, ansiedade ou estresse crônico</strong> — que ninguém investiga a fundo</span></li>
+      <li><span><strong>Busca uma abordagem integrativa</strong> — que enxergue além do sintoma</span></li>
     </ul>
   </section>
 
-  <section class="cartao">
-    <h2>Como funciona</h2>
-    <div class="passos">
-      <div class="passo"><div class="num">1</div><div><strong>Escuta profunda e acolhimento</strong><span>Tempo de verdade para a sua história — a consulta dura o que precisar durar.</span></div></div>
-      <div class="passo"><div class="num">2</div><div><strong>Investigação completa</strong><span>Diagnóstico clínico que enxerga corpo, mente e contexto de vida.</span></div></div>
-      <div class="passo"><div class="num">3</div><div><strong>Tratamento personalizado</strong><span>Medicina integrativa baseada em evidências, no seu ritmo.</span></div></div>
-      <div class="passo"><div class="num">4</div><div><strong>Acompanhamento contínuo</strong><span>Você não sai da consulta sozinho: seguimos juntos no processo.</span></div></div>
+  <section class="cartao" data-secao="cuidadoIntegral">
+    <h2>Cuidado Integral</h2>
+    <div class="grade2">
+      <div class="item"><strong>Avaliação clínica individualizada</strong><span>Seu histórico, seu contexto e seus objetivos no centro da consulta.</span></div>
+      <div class="item"><strong>Medicina Integrativa</strong><span>Ciência e acolhimento juntos, com tratamento baseado em evidências.</span></div>
+      <div class="item"><strong>Saúde Mental e Bem-estar</strong><span>Burnout, ansiedade, sono e estresse investigados com profundidade.</span></div>
+      <div class="item"><strong>Relação de confiança</strong><span>Você não sai da consulta sozinho: seguimos juntos no processo.</span></div>
     </div>
   </section>
 
-  <section class="cartao">
+  <section class="cartao" data-secao="metodo">
+    <h2>Método de Atendimento</h2>
+    <div class="passos">
+      <div class="passo"><div class="num">1</div><div><strong>Escuta profunda e acolhimento</strong><span>Tempo de verdade para a sua história — a consulta dura o que precisar durar.</span></div></div>
+      <div class="passo"><div class="num">2</div><div><strong>Diagnóstico clínico completo</strong><span>Investigação que enxerga corpo, mente e contexto de vida.</span></div></div>
+      <div class="passo"><div class="num">3</div><div><strong>Tratamento personalizado</strong><span>Medicina integrativa baseada em evidências, no seu ritmo.</span></div></div>
+      <div class="passo"><div class="num">4</div><div><strong>Acompanhamento contínuo</strong><span>Ajustes e suporte ao longo de todo o tratamento.</span></div></div>
+    </div>
+  </section>
+
+  <section class="cartao centro" data-secao="videoBurnout">
+    <h2>Entenda o burnout em poucos segundos</h2>
+    <div class="fone">
+      <iframe src="../video-burnout-reels.dc.html?embed=1" title="Animação sobre burnout" loading="lazy" scrolling="no" sandbox="allow-scripts allow-same-origin"></iframe>
+    </div>
+  </section>
+
+  <section class="cartao" data-secao="jornada">
+    <h2>A jornada de quem nunca foi ouvido</h2>
+    <div id="jornadaFrases" class="jornada-frases"></div>
+  </section>
+
+  <section class="cartao" data-secao="consultaOnline">
     <h2>Consulta online, com o mesmo cuidado de sempre</h2>
     <p>Atendimento por videochamada segura (Google Meet), de onde você estiver. Agendamento e pagamento em poucos cliques — PIX ou cartão em até 3x sem juros.</p>
   </section>
 
-  <section class="cartao">
-    <blockquote class="depo">
-      "Você merece um atendimento que valorize tudo que é importante para você."
-      <footer>Dr. Luiz Fernando Lorenci — LFL Cuidado e Saúde</footer>
-    </blockquote>
+  <section class="cartao" data-secao="depoimentos">
+    <h2>Experiências reais de quem já foi atendido</h2>
+    <blockquote class="depo">"Finalmente encontrei um médico que realmente ouve. A consulta foi completamente diferente do que eu estava acostumada — me senti acolhida do início ao fim."<footer>Paciente — consulta online</footer></blockquote>
+    <blockquote class="depo">"A consulta online foi excelente. O Dr. Lorenci tem uma capacidade incrível de entender o paciente mesmo à distância. Recomendo muito."<footer>Paciente — consulta online</footer></blockquote>
+    <blockquote class="depo">"Depois de anos com ansiedade e sem respostas concretas, encontrei no Dr. Lorenci um olhar diferente e um tratamento que realmente funciona."<footer>Paciente — consulta online</footer></blockquote>
   </section>
 
-  <div>
+  <div data-secao="ctaFinal">
     <a class="btn" href="https://agendamento.clinicalorenci.com.br">Agendar minha consulta</a>
     <p class="btn-nota">Vagas limitadas por semana para garantir tempo de escuta de verdade.</p>
   </div>
@@ -180,8 +232,68 @@
 
 </main>
 
-<a class="wa" href="https://wa.me/message/J2QCNGVBCGD6M1" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+<!-- Vídeo flutuante "A Jornada" (mini-player, aparece após rolar o topo) -->
+<div class="mini-jornada" id="miniJornada" data-flutuante="videoFlutuante" hidden>
+  <button class="fechar" type="button" aria-label="Fechar vídeo" onclick="this.parentElement.remove()">×</button>
+  <iframe src="../assets/video-jornada.html" title="A jornada — animação" loading="lazy" sandbox="allow-scripts"></iframe>
+</div>
+
+<a class="wa" id="waFloat" data-flutuante="whatsappFlutuante" href="https://wa.me/message/J2QCNGVBCGD6M1" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
   <svg viewBox="0 0 32 32"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.1.6 4.2 1.6 6L4 29l8.2-1.5c1.2.6 2.5.9 3.8.9 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-1.2 0-2.4-.3-3.5-.8l-.6-.3-4.9.9 1-4.7-.3-.6c-.9-1.5-1.4-3.2-1.4-4.9 0-5.4 4.4-9.8 9.8-9.8s9.8 4.4 9.8 9.8-4.5 10.4-9.9 10.4zm5.4-7.3c-.3-.1-1.7-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1c-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1s0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5s0-.4 0-.5c0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.5 1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.5-.3z"/></svg>
 </a>
+
+<script src="../content.js"></script>
+<script>
+  // ── Conteúdo e configuração vêm do content.js (editado pelo admin) ──
+  var C = window.SITE_CONTENT || {};
+
+  // Frases da "Jornada" (mesma fonte da animação/vídeo)
+  (function () {
+    var alvo = document.getElementById('jornadaFrases');
+    (C.jornada || []).forEach(function (cena) {
+      var f = document.createElement('div');
+      f.className = 'jfrase';
+      f.innerHTML = cena.h + (cena.p ? '<span class="japoio">' + cena.p + '</span>' : '');
+      alvo.appendChild(f);
+    });
+  })();
+
+  // Config de exibição: cada seção/flutuante pode ser ligado/desligado no
+  // admin. Sem config (content.js antigo), TUDO fica ligado — compatível.
+  function aplicarConfig(config) {
+    config = config || {};
+    var secoes = config.secoes || {};
+    document.querySelectorAll('[data-secao]').forEach(function (el) {
+      el.hidden = secoes[el.dataset.secao] === false;
+    });
+    document.querySelectorAll('[data-flutuante]').forEach(function (el) {
+      var ligado = config[el.dataset.flutuante] !== false;
+      if (el.id === 'miniJornada') {
+        // O mini-player só aparece depois de rolar o topo (comportamento
+        // original do site) — e nunca se estiver desligado no admin.
+        el.dataset.ligado = ligado ? '1' : '';
+        el.hidden = true;
+      } else {
+        el.hidden = !ligado;
+      }
+    });
+  }
+  aplicarConfig(C.config);
+  window.aplicarConfig = aplicarConfig; // reutilizável em testes/preview
+
+  // Mini-player: mostra após rolar ~60% da altura da tela
+  (function () {
+    var mini = document.getElementById('miniJornada');
+    if (!mini) return;
+    function aoRolar() {
+      if (!mini.dataset.ligado || !document.body.contains(mini)) return;
+      var passou = window.scrollY > window.innerHeight * 0.6;
+      mini.hidden = false;
+      mini.classList.toggle('visivel', passou);
+    }
+    window.addEventListener('scroll', aoRolar, { passive: true });
+    aoRolar();
+  })();
+</script>
 </body>
 </html>
