@@ -96,3 +96,67 @@ o lugar errado — pagamentos não confirmam.
    Calendar confirmado.
 
 Status possíveis do pedido: `pending`, `paid`, `manual_review`.
+
+## 7. Os DOIS painéis de admin (não são o mesmo, nem têm a mesma senha)
+
+Hoje **não** existe um admin único. São dois, em domínios diferentes:
+
+| Painel | Endereço | O que faz | Senha |
+|---|---|---|---|
+| **Admin do site** | `clinicalorenci.com.br/admin.html` | Só edita conteúdo: frases da animação "A Jornada" e o texto da Política de Privacidade. Gera um `content.js` para baixar. Roda 100% no navegador. | **Nenhuma.** Não tem login — qualquer pessoa com o link abre. |
+| **Admin do agendamento** | `agendamento.clinicalorenci.com.br` (painel em `public/admin/`) | Dashboard de pedidos/pagamentos: logs (`/api/admin/logs`) e resumo (`/api/admin/logs/summary`). | **`ADMIN_TOKEN`** (token Bearer). O login pede "Token de Acesso"; também aceita `?token=...` na URL. |
+
+**Qual é a senha do admin de agendamento?** É o valor de `ADMIN_TOKEN`.
+**Esse valor NÃO está no backup** (`.env.producao.REAL` não o contém) — ele
+existe apenas nas variáveis de ambiente do app no **Coolify**. Para descobrir:
+abra o app `agendamento` no Coolify → *Environment Variables* → `ADMIN_TOKEN`.
+Se não existir lá, o painel responde `500 ADMIN_TOKEN não configurado` — nesse
+caso, crie um valor forte, salve e redeploy; esse passa a ser a senha.
+
+> ⚠️ **Não dá para "condensar" o dashboard de pedidos/pagamentos dentro de
+> `clinicalorenci.com.br/admin`.** Aquele admin do site é estático (sem
+> servidor); o dashboard de pedidos precisa da API com banco de dados, que só
+> roda no VPS (agendamento). Dá para *unificar o visual* (uma página que
+> aponta para a API do agendamento via CORS), mas é uma mudança de arquitetura
+> — decidir antes de fazer.
+
+## 8. Inventário de APIs e segredos (o que o código usa × o que veio no backup)
+
+Cruzamento entre `process.env.*` no código e as chaves do `.env.producao.REAL`.
+**Valores reais não ficam aqui** — só os nomes e para que servem.
+
+### Presentes no backup e em uso ✅
+`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` (MySQL) · `MP_ACCESS_TOKEN`
+(Mercado Pago — Checkout Pro) · `SITE_URL` · `MEET_FUNCTION_URL` +
+`AGENDAMENTO_SHARED_SECRET` (Google Meet/Calendar via função externa) ·
+`OUTBOUND_WEBHOOKS` · `CONSULTATION_*`, `BOOKING_*`, `DISCOUNT_AMOUNT`,
+`PAYMENT_WINDOW_HOURS`, `PORT`, `NODE_ENV`.
+
+### Usados pelo código mas AUSENTES no backup ❌ (conferir/definir no Coolify)
+| Variável | Para que serve | Efeito se faltar |
+|---|---|---|
+| `MP_WEBHOOK_SECRET` | Valida a assinatura do webhook do Mercado Pago | Webhook rejeita **tudo com 401** → pedido nunca vira `paid` |
+| `ADMIN_TOKEN` | Senha do painel admin do agendamento | Login impossível; API responde `500` |
+| `DRIVE_FUNCTION_URL` | Upload dos arquivos do paciente (exames/docs) para o Google Drive | Upload de arquivos falha |
+| `MEET_UPDATE_FUNCTION_URL` | (Opcional) confirmar/atualizar o evento do Meet | Pode ser a mesma `MEET_FUNCTION_URL` com `?action=update` |
+
+### Presentes no backup mas não referenciados pelo código atual (reserva)
+`MP_PUBLIC_KEY`, `MP_CLIENT_ID`, `MP_CLIENT_SECRET` — úteis para SDK no
+navegador / OAuth; o fluxo atual (Checkout Pro server-side) usa só o
+`MP_ACCESS_TOKEN`.
+
+### Contas/integrações externas que exigem credencial própria
+- **Mercado Pago** — conta de produção *LFL CUIDADO E SAUDE LTDA*
+  (`MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET` no painel de Webhooks).
+- **Google Calendar/Meet e Drive** — conta de serviço Google, via funções
+  externas (`MEET_FUNCTION_URL`, `DRIVE_FUNCTION_URL`) autenticadas por
+  `AGENDAMENTO_SHARED_SECRET`.
+- **MySQL** — usuário/senha do banco do Coolify (`DB_*`).
+
+> ⚠️ **Pontes soltas no código do backup:** `routes/admin.js` e
+> `routes/client-lookup.js` existem mas **não estão montados** no `server.js`
+> (que só monta available-slots, create-order, mp-webhook, order-status,
+> upload-files). Assim, `/api/admin/*` e o auto-preenchimento por CPF/telefone
+> não respondem. Se o `server.js` de produção for igual a este backup, esses
+> recursos estão desligados e precisam ser reconectados (um `require` + um
+> `app.use('/api', ...)` para cada).
