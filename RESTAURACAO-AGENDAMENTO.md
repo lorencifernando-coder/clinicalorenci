@@ -130,6 +130,23 @@ o lugar errado — pagamentos não confirmam.
 
 Status possíveis do pedido: `pending`, `paid`, `manual_review`.
 
+## 6.1 Avisos de manutenção (aprendidos no pente-fino)
+
+- **Aba "Pedidos & Pagamentos" do admin unificado só funciona no deploy
+  VPS/Node** (`server.js` tem o proxy `/api/agendamento/*`). Em hospedagem
+  estática (`.htaccess`) a aba mostra erro de conexão — é esperado.
+  E ela depende das rotas `/api/admin/*` estarem montadas no backend do
+  agendamento (Fase 3 do `PROMPT-MISSAO-AGENTE.md`).
+- **Se o `index.html` for re-exportado pelo Base44**, o
+  `<meta charset="utf-8">` adicionado à mão no início do `<head>` será
+  sobrescrito — reaplique-o (ou confie no servidor: o Express e o `.htaccess`
+  também forçam UTF-8, então o risco real é só ao abrir o arquivo localmente
+  ou em hospedagem sem essas camadas).
+- **Os vídeos `.dc.html` carregam React do CDN unpkg.com em runtime**
+  (`support.js`, que o README manda não editar). Sem internet ou com o CDN
+  fora do ar, os vídeos não iniciam. Aceitável hoje; se virar problema,
+  auto-hospedar o React é a solução.
+
 ## 7. Os DOIS painéis de admin (não são o mesmo, nem têm a mesma senha)
 
 Hoje **não** existe um admin único. São dois, em domínios diferentes:

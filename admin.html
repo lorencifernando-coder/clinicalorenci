@@ -3,16 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin — Conteúdo do Site</title>
+<title>Admin — LFL Cuidado e Saúde</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --ink:#1E2B38; --ink-soft:#4a5a68; --bg:#F7F4EE; --card:#FFFFFF; --border:#E5DFD3; --cta:#C98B5E; }
+  :root { --ink:#1E2B38; --ink-soft:#4a5a68; --bg:#F7F4EE; --card:#FFFFFF; --border:#E5DFD3; --cta:#C98B5E;
+          --ok:#2e9e6b; --warn:#d99a2b; --err:#c0392b; --manual:#d97706; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--ink-soft); padding-bottom:120px; }
-  .topo { background:var(--ink); padding:24px 40px; display:flex; align-items:center; justify-content:space-between; }
+  .topo { background:var(--ink); padding:24px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
   .topo h1 { font-family:'Playfair Display',serif; color:#fff; font-size:20px; font-weight:600; }
   .topo span { color:rgba(255,255,255,.55); font-size:13px; }
-  .wrap { max-width:860px; margin:0 auto; padding:40px 24px; display:flex; flex-direction:column; gap:40px; }
+  .abas { background:var(--ink); padding:0 40px; display:flex; gap:4px; }
+  .abas button { border:0; background:transparent; color:rgba(255,255,255,.6); font:600 14px 'Inter',sans-serif;
+                 padding:12px 20px; cursor:pointer; border-radius:10px 10px 0 0; }
+  .abas button.ativa { background:var(--bg); color:var(--ink); }
+  .wrap { max-width:980px; margin:0 auto; padding:40px 24px; display:flex; flex-direction:column; gap:40px; }
   .bloco { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:28px; }
   .bloco h2 { font-family:'Playfair Display',serif; color:var(--ink); font-size:19px; margin-bottom:6px; }
   .bloco .dica { font-size:12.5px; color:#8a94a0; margin-bottom:20px; line-height:1.6; }
@@ -32,11 +37,52 @@
   .salvar button:hover { background:#b5794f; }
   .salvar small { color:rgba(255,255,255,.6); font-size:12.5px; line-height:1.5; }
   .ok { color:#7fc98b !important; }
+
+  /* ── Aba Pedidos & Pagamentos ─────────────────────────────── */
+  .resumo { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-bottom:20px; }
+  .resumo .cartao { background:var(--card); border:1px solid var(--border); border-top:4px solid var(--cta); border-radius:10px; padding:14px; text-align:center; }
+  .resumo .cartao .rotulo { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#8a94a0; margin-bottom:6px; }
+  .resumo .cartao .valor { font-family:'Playfair Display',serif; font-size:26px; color:var(--ink); }
+  .resumo .cartao.c-paid  { border-top-color:var(--ok); }
+  .resumo .cartao.c-pend  { border-top-color:var(--warn); }
+  .resumo .cartao.c-fail  { border-top-color:var(--err); }
+  .resumo .cartao.c-man   { border-top-color:var(--manual); }
+  .tabela-caixa { overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:var(--card); }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+  th { background:var(--bg); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:#8a94a0; }
+  tr:last-child td { border-bottom:none; }
+  .selo { display:inline-block; padding:3px 8px; border-radius:5px; font-size:11px; font-weight:600; text-transform:uppercase; }
+  .selo.paid, .selo.approved, .selo.preference_created { background:rgba(46,158,107,.12); color:var(--ok); }
+  .selo.pending { background:rgba(217,154,43,.12); color:var(--warn); }
+  .selo.failed, .selo.expired, .selo.rejected { background:rgba(192,57,43,.12); color:var(--err); }
+  .selo.manual_review { background:rgba(217,119,6,.12); color:var(--manual); }
+  .login-caixa { max-width:420px; margin:0 auto; }
+  .login-caixa input { width:100%; border:1px solid var(--border); border-radius:8px; padding:12px; font:14px 'Inter',sans-serif; }
+  .login-caixa input:focus { outline:2px solid var(--cta); border-color:transparent; }
+  .botao { background:var(--cta); color:#fff; border:0; border-radius:8px; padding:12px 24px; font:600 14px 'Inter',sans-serif; cursor:pointer; margin-top:14px; }
+  .botao:hover { background:#b5794f; }
+  .botao.sec { background:transparent; color:var(--ink-soft); border:1px solid var(--border); }
+  .aviso { border-radius:8px; padding:12px 14px; font-size:13px; line-height:1.6; margin-bottom:16px; display:none; }
+  .aviso.erro { display:block; background:rgba(192,57,43,.08); color:var(--err); }
+  .aviso.info { display:block; background:rgba(201,139,94,.1); color:var(--ink-soft); }
+  .barra-acoes { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+  .barra-acoes .direita { display:flex; gap:8px; align-items:center; }
+  .link-externo { font-size:12.5px; color:var(--cta); }
+  [hidden] { display:none !important; }
 </style>
 </head>
 <body>
-<div class="topo"><h1>Admin · Conteúdo do Site</h1><span>LFL Cuidado e Saúde</span></div>
-<div class="wrap">
+<div class="topo">
+  <div><h1>Admin · LFL Cuidado e Saúde</h1><span>Painel unificado — conteúdo do site e pedidos</span></div>
+</div>
+<div class="abas">
+  <button id="abaConteudo" class="ativa" type="button">Conteúdo do Site</button>
+  <button id="abaPedidos" type="button">Pedidos &amp; Pagamentos</button>
+</div>
+
+<!-- ══════════════ ABA 1: CONTEÚDO DO SITE (editor original) ══════════════ -->
+<div class="wrap" id="painelConteudo">
   <div class="bloco">
     <h2>Frases da animação "A Jornada"</h2>
     <p class="dica">Cada campo é uma cena do vídeo. Use <b>&lt;br&gt;</b> para quebrar linha e <b>&lt;span class="jaccent"&gt;texto&lt;/span&gt;</b> para destacar em dourado. O campo "apoio" é a linha menor (deixe vazio se a cena não tiver).</p>
@@ -57,12 +103,57 @@
     <div id="editorPriv" contenteditable="true"></div>
   </div>
 </div>
-<div class="salvar">
+
+<!-- ══════════════ ABA 2: PEDIDOS & PAGAMENTOS (dashboard) ══════════════ -->
+<div class="wrap" id="painelPedidos" hidden>
+  <!-- Login por token -->
+  <div class="bloco login-caixa" id="loginPedidos">
+    <h2>Acesso ao painel de pedidos</h2>
+    <p class="dica">Informe o <b>token de acesso</b> (ADMIN_TOKEN) do sistema de agendamento. Ele fica nas variáveis de ambiente do app no Coolify.</p>
+    <div id="avisoLogin" class="aviso"></div>
+    <label for="tokenInput">Token de acesso</label>
+    <input id="tokenInput" type="password" placeholder="Cole o ADMIN_TOKEN aqui" autocomplete="off">
+    <button class="botao" id="btnEntrar" type="button">Entrar</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashPedidos" hidden>
+    <div class="barra-acoes">
+      <div id="avisoDash" class="aviso" style="margin:0"></div>
+      <div class="direita">
+        <a class="link-externo" href="https://agendamento.clinicalorenci.com.br/admin/" target="_blank" rel="noopener">Abrir painel completo do agendamento ↗</a>
+        <button class="botao sec" id="btnAtualizar" type="button">Atualizar</button>
+        <button class="botao sec" id="btnSair" type="button">Sair</button>
+      </div>
+    </div>
+    <div class="resumo">
+      <div class="cartao"><div class="rotulo">Pedidos (30d)</div><div class="valor" id="rTotal">–</div></div>
+      <div class="cartao c-paid"><div class="rotulo">Pagos</div><div class="valor" id="rPagos">–</div></div>
+      <div class="cartao c-pend"><div class="rotulo">Pendentes</div><div class="valor" id="rPend">–</div></div>
+      <div class="cartao c-fail"><div class="rotulo">Falhas</div><div class="valor" id="rFalhas">–</div></div>
+      <div class="cartao c-man"><div class="rotulo">Rev. manual</div><div class="valor" id="rManual">–</div></div>
+      <div class="cartao"><div class="rotulo">Esta semana</div><div class="valor" id="rSemana">–</div></div>
+    </div>
+    <div class="bloco" style="padding:0">
+      <div class="tabela-caixa">
+        <table>
+          <thead><tr><th>Quando</th><th>Cliente</th><th>Operação</th><th>Status</th><th>Detalhe</th></tr></thead>
+          <tbody id="corpoLogs"><tr><td colspan="5" style="text-align:center;color:#8a94a0;padding:32px">Carregando…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Barra fixa de salvar (só faz sentido na aba de conteúdo) -->
+<div class="salvar" id="barraSalvar">
   <button id="btnSalvar">Baixar content.js atualizado</button>
   <small id="msg">Após baixar, substitua o arquivo <b>content.js</b> na pasta do site no servidor.<br>As alterações aparecem na página e no vídeo automaticamente.</small>
 </div>
+
 <script src="content.js"></script>
 <script>
+  /* ════════ ABA 1 — editor de conteúdo (código original, intacto) ════════ */
   var C = window.SITE_CONTENT || { jornada: [], privacidade: '' };
   var cenasEl = document.getElementById('cenas');
   C.jornada.forEach(function (s, i) {
@@ -101,6 +192,144 @@
     msg.classList.add('ok');
     msg.innerHTML = 'Arquivo baixado! Substitua o <b>content.js</b> no servidor para publicar.';
   });
+
+  /* ════════ Navegação entre abas ════════ */
+  var abaConteudo = document.getElementById('abaConteudo');
+  var abaPedidos  = document.getElementById('abaPedidos');
+  var painelConteudo = document.getElementById('painelConteudo');
+  var painelPedidos  = document.getElementById('painelPedidos');
+  var barraSalvar    = document.getElementById('barraSalvar');
+
+  function mostrarAba(qual) {
+    var pedidos = qual === 'pedidos';
+    abaConteudo.classList.toggle('ativa', !pedidos);
+    abaPedidos.classList.toggle('ativa', pedidos);
+    painelConteudo.hidden = pedidos;
+    painelPedidos.hidden = !pedidos;
+    barraSalvar.style.display = pedidos ? 'none' : 'flex';
+    if (pedidos) {
+      if (tokenSalvo()) iniciarDashboard();
+    } else if (timerRefresh) {
+      // Sai da aba de pedidos: para o refresh automático (não faz sentido
+      // continuar consultando a API com o dashboard escondido).
+      clearInterval(timerRefresh);
+      timerRefresh = null;
+    }
+  }
+  abaConteudo.addEventListener('click', function () { mostrarAba('conteudo'); });
+  abaPedidos.addEventListener('click', function () { mostrarAba('pedidos'); });
+  if (location.hash === '#pedidos') mostrarAba('pedidos');
+
+  /* ════════ ABA 2 — dashboard de pedidos (via proxy /api/agendamento) ════════ */
+  var API = '/api/agendamento';
+  var timerRefresh = null;
+
+  function tokenSalvo() { return localStorage.getItem('admin_token') || ''; }
+
+  function cabecalhos() {
+    return { 'Authorization': 'Bearer ' + tokenSalvo() };
+  }
+
+  function mostrarLogin(mensagemErro) {
+    document.getElementById('loginPedidos').hidden = false;
+    document.getElementById('dashPedidos').hidden = true;
+    var aviso = document.getElementById('avisoLogin');
+    if (mensagemErro) { aviso.textContent = mensagemErro; aviso.className = 'aviso erro'; }
+    else { aviso.className = 'aviso'; aviso.textContent = ''; }
+    if (timerRefresh) { clearInterval(timerRefresh); timerRefresh = null; }
+  }
+
+  function esc(texto) {
+    var div = document.createElement('div');
+    div.textContent = texto == null ? '' : String(texto);
+    return div.innerHTML;
+  }
+
+  // Chama a API via proxy com o token; trata 401 e erros de forma única.
+  async function apiGet(subPath, msgFalha) {
+    var r = await fetch(API + subPath, { headers: cabecalhos() });
+    if (r.status === 401) throw { auth: true };
+    if (!r.ok) {
+      var corpo = await r.json().catch(function () { return {}; });
+      throw new Error(corpo.error || msgFalha +
+        ' (se persistir, confira se as rotas /api/admin estão ativas no agendamento — Fase 3 da missão)');
+    }
+    return r.json();
+  }
+
+  async function buscarResumo() {
+    var d = await apiGet('/admin/logs/summary', 'Falha ao carregar o resumo');
+    document.getElementById('rTotal').textContent  = d.total;
+    document.getElementById('rPagos').textContent  = d.paid;
+    document.getElementById('rPend').textContent   = d.pending;
+    document.getElementById('rFalhas').textContent = d.failed;
+    document.getElementById('rManual').textContent = d.manual_review;
+    document.getElementById('rSemana').textContent = d.this_week;
+  }
+
+  async function buscarLogs() {
+    var logs = await apiGet('/admin/logs', 'Falha ao carregar os registros');
+    var corpo = document.getElementById('corpoLogs');
+    if (!logs.length) {
+      corpo.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#8a94a0;padding:32px">Nenhum registro ainda.</td></tr>';
+      return;
+    }
+    corpo.innerHTML = logs.map(function (log) {
+      var quando = log.timestamp ? new Date(log.timestamp).toLocaleString('pt-BR') : '–';
+      var status = log.status || 'pending';
+      // Em contexto de ATRIBUTO (class) só entram caracteres seguros —
+      // esc() cobre conteúdo de elemento, não aspas dentro de atributo.
+      var statusClasse = String(status).replace(/[^a-zA-Z0-9_-]/g, '');
+      var detalhe = log.status_detail || log.message || 'OK';
+      var operacao = (log.source || '') + (log.type === 'webhook_event' ? ' (webhook)' : '');
+      return '<tr>' +
+        '<td style="white-space:nowrap">' + esc(quando) + '</td>' +
+        '<td><strong>' + esc(log.client_name || 'SISTEMA') + '</strong></td>' +
+        '<td>' + esc(operacao) + '</td>' +
+        '<td><span class="selo ' + statusClasse + '">' + esc(status) + '</span></td>' +
+        '<td style="max-width:340px;word-break:break-word;color:#8a94a0">' + esc(detalhe) + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  async function carregarDashboard() {
+    var aviso = document.getElementById('avisoDash');
+    aviso.className = 'aviso';
+    try {
+      await Promise.all([buscarResumo(), buscarLogs()]);
+    } catch (e) {
+      if (e && e.auth) {
+        localStorage.removeItem('admin_token');
+        mostrarLogin('Token inválido ou expirado. Entre novamente.');
+        return;
+      }
+      aviso.textContent = (e && e.message) || 'Erro de conexão com o sistema de agendamento.';
+      aviso.className = 'aviso erro';
+    }
+  }
+
+  function iniciarDashboard() {
+    document.getElementById('loginPedidos').hidden = true;
+    document.getElementById('dashPedidos').hidden = false;
+    carregarDashboard();
+    if (!timerRefresh) timerRefresh = setInterval(carregarDashboard, 30000);
+  }
+
+  document.getElementById('btnEntrar').addEventListener('click', function () {
+    var t = document.getElementById('tokenInput').value.trim();
+    if (!t) { mostrarLogin('Informe o token de acesso.'); return; }
+    localStorage.setItem('admin_token', t);
+    document.getElementById('tokenInput').value = '';
+    iniciarDashboard();
+  });
+  document.getElementById('tokenInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') document.getElementById('btnEntrar').click();
+  });
+  document.getElementById('btnSair').addEventListener('click', function () {
+    localStorage.removeItem('admin_token');
+    mostrarLogin();
+  });
+  document.getElementById('btnAtualizar').addEventListener('click', carregarDashboard);
 </script>
 </body>
 </html>
