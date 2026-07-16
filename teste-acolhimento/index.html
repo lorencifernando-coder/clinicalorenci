@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dr. Luiz Fernando Lorenci — Medicina que escuta</title>
+<meta name="description" content="Consulta de acolhimento com o Dr. Luiz Fernando Lorenci. Medicina integrativa, burnout e saúde mental — online para todo o Brasil.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Linguagem visual da página de acolhimento ─────────────── */
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #F4F0EA;
+    --card: #FFFFFF;
+    --ink: #1E2B38;
+    --ink-soft: #4A5D52;
+    --muted: #7A8C82;
+    --cta: #C67A5C;
+    --cta-hover: #B5684C;
+    --cta-pale: #F5E8E2;
+    --border: #E2DDD6;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family:'Inter',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 96px;
+  }
+  main { width:100%; max-width:560px; display:flex; flex-direction:column; gap:28px; }
+
+  h1, h2 { font-family:'Playfair Display',Georgia,serif; color:var(--ink); }
+  .centro { text-align:center; }
+
+  /* Cabeçalho */
+  .topo img.crest { height:64px; margin:0 auto 14px; display:block; }
+  .topo h1 { font-size:clamp(26px,6vw,34px); line-height:1.25; margin-bottom:10px; }
+  .topo h1 em { font-style:normal; color:var(--cta); }
+  .topo .sub { color:var(--muted); font-size:14.5px; }
+
+  /* Cartões */
+  .cartao {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:26px;
+  }
+  .cartao h2 { font-size:20px; margin-bottom:12px; }
+  .cartao p { font-size:14.5px; color:var(--ink-soft); }
+  .cartao p + p { margin-top:10px; }
+
+  /* Médico */
+  .medico { display:flex; gap:18px; align-items:center; }
+  .medico img { width:92px; height:92px; border-radius:50%; object-fit:cover; object-position:center 20%; border:3px solid var(--cta-pale); flex-shrink:0; }
+  .medico .nome { font-family:'Playfair Display',serif; font-size:18px; }
+  .medico .crm { font-size:12.5px; color:var(--muted); margin-top:2px; }
+  .medico .desc { font-size:13.5px; color:var(--ink-soft); margin-top:8px; }
+
+  /* Lista de dores */
+  .dores { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+  .dores li {
+    background:var(--cta-pale);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:14px;
+    color:var(--ink);
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .dores li::before { content:'—'; color:var(--cta); font-weight:700; }
+
+  /* Como funciona (passos, eco das bolinhas da acolhimento) */
+  .passos { display:flex; flex-direction:column; gap:14px; margin-top:6px; }
+  .passo { display:flex; gap:14px; align-items:flex-start; }
+  .passo .num {
+    width:30px; height:30px; border-radius:50%;
+    background:var(--cta); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:14px; flex-shrink:0; margin-top:2px;
+  }
+  .passo strong { display:block; font-size:14.5px; }
+  .passo span { font-size:13.5px; color:var(--ink-soft); }
+
+  /* Depoimento */
+  .depo { border-left:3px solid var(--cta); padding-left:16px; font-style:italic; color:var(--ink-soft); font-size:14.5px; }
+  .depo footer { font-style:normal; font-size:12.5px; color:var(--muted); margin-top:8px; }
+
+  /* CTA */
+  .btn {
+    display:block; width:100%; text-align:center;
+    background:var(--cta); color:#fff; text-decoration:none;
+    font-weight:700; font-size:15.5px;
+    padding:16px 20px; border-radius:12px;
+    transition:background .2s;
+  }
+  .btn:hover { background:var(--cta-hover); }
+  .btn-nota { text-align:center; font-size:12.5px; color:var(--muted); margin-top:10px; }
+
+  /* Rodapé */
+  .rodape { text-align:center; font-size:12.5px; color:var(--muted); line-height:1.8; }
+  .rodape a { color:var(--muted); }
+
+  /* WhatsApp flutuante */
+  .wa {
+    position:fixed; right:18px; bottom:18px; z-index:50;
+    width:54px; height:54px; border-radius:50%;
+    background:#25D366; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+  }
+  .wa svg { width:28px; height:28px; fill:#fff; }
+</style>
+</head>
+<body>
+<main>
+
+  <header class="topo centro">
+    <img class="crest" src="../assets/crest-icon.png" alt="LFL Cuidado e Saúde">
+    <h1>Quando foi a última vez que um médico <em>realmente te ouviu?</em></h1>
+    <p class="sub">Dr. Luiz Fernando Lorenci · Online para todo o Brasil</p>
+  </header>
+
+  <a class="btn" href="https://agendamento.clinicalorenci.com.br">Agendar Consulta de Acolhimento</a>
+
+  <section class="cartao">
+    <div class="medico">
+      <img src="../assets/dr-luiz-foto.png" alt="Dr. Luiz Fernando Lorenci">
+      <div>
+        <div class="nome">Dr. Luiz Fernando Lorenci</div>
+        <div class="crm">CRMSC-41096 · Medicina Integrativa</div>
+        <p class="desc">Um médico que ouve, investiga e caminha com você — sem pressa, sem julgamentos.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cartao">
+    <h2>Você se identifica?</h2>
+    <ul class="dores">
+      <li>Consultas de 15 minutos que terminam antes de você conseguir explicar o que sente</li>
+      <li>Esgotamento e burnout que ninguém investiga a fundo</li>
+      <li>Ansiedade e sono ruim tratados só com receita rápida</li>
+      <li>A sensação de que o sintoma foi mascarado — e a causa continua lá</li>
+    </ul>
+  </section>
+
+  <section class="cartao">
+    <h2>Como funciona</h2>
+    <div class="passos">
+      <div class="passo"><div class="num">1</div><div><strong>Escuta profunda e acolhimento</strong><span>Tempo de verdade para a sua história — a consulta dura o que precisar durar.</span></div></div>
+      <div class="passo"><div class="num">2</div><div><strong>Investigação completa</strong><span>Diagnóstico clínico que enxerga corpo, mente e contexto de vida.</span></div></div>
+      <div class="passo"><div class="num">3</div><div><strong>Tratamento personalizado</strong><span>Medicina integrativa baseada em evidências, no seu ritmo.</span></div></div>
+      <div class="passo"><div class="num">4</div><div><strong>Acompanhamento contínuo</strong><span>Você não sai da consulta sozinho: seguimos juntos no processo.</span></div></div>
+    </div>
+  </section>
+
+  <section class="cartao">
+    <h2>Consulta online, com o mesmo cuidado de sempre</h2>
+    <p>Atendimento por videochamada segura (Google Meet), de onde você estiver. Agendamento e pagamento em poucos cliques — PIX ou cartão em até 3x sem juros.</p>
+  </section>
+
+  <section class="cartao">
+    <blockquote class="depo">
+      "Você merece um atendimento que valorize tudo que é importante para você."
+      <footer>Dr. Luiz Fernando Lorenci — LFL Cuidado e Saúde</footer>
+    </blockquote>
+  </section>
+
+  <div>
+    <a class="btn" href="https://agendamento.clinicalorenci.com.br">Agendar minha consulta</a>
+    <p class="btn-nota">Vagas limitadas por semana para garantir tempo de escuta de verdade.</p>
+  </div>
+
+  <footer class="rodape">
+    LFL Cuidado e Saúde · Dr. Luiz Fernando Lorenci · CRMSC-41096<br>
+    <a href="../politica-de-privacidade.html">Política de Privacidade e Proteção de Dados</a>
+  </footer>
+
+</main>
+
+<a class="wa" href="https://wa.me/message/J2QCNGVBCGD6M1" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 32 32"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.1.6 4.2 1.6 6L4 29l8.2-1.5c1.2.6 2.5.9 3.8.9 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-1.2 0-2.4-.3-3.5-.8l-.6-.3-4.9.9 1-4.7-.3-.6c-.9-1.5-1.4-3.2-1.4-4.9 0-5.4 4.4-9.8 9.8-9.8s9.8 4.4 9.8 9.8-4.5 10.4-9.9 10.4zm5.4-7.3c-.3-.1-1.7-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1c-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1s0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5s0-.4 0-.5c0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.5 1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.5-.3z"/></svg>
+</a>
+</body>
+</html>
