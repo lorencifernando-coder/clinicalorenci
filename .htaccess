@@ -1,0 +1,46 @@
+# ══════════════════════════════════════════════════════════════
+#  .htaccess — Site Dr. Luiz Fernando Lorenci (Hostinger / Apache)
+#  ------------------------------------------------------------------
+#  Este arquivo faz o site estático se comportar como o server.js
+#  (Express) fazia: página inicial, URLs amigáveis, charset correto
+#  e o tipo de arquivo dos vídeos (.jsx). NÃO apaga nada.
+#  Suba-o na MESMA pasta do index.html (raiz do site) na Hostinger.
+# ══════════════════════════════════════════════════════════════
+
+# --- Página inicial padrão -----------------------------------------
+DirectoryIndex index.html
+
+# --- Codificação: força UTF-8 (corrige acentos "estranhos") --------
+AddDefaultCharset UTF-8
+<IfModule mod_mime.c>
+  AddCharset UTF-8 .html .htm .js .jsx .css .json .svg
+  # Motor dos vídeos: arquivos .jsx precisam sair como JavaScript,
+  # senão o navegador recusa e os vídeos "somem".
+  AddType application/javascript .jsx .mjs .js
+</IfModule>
+
+# --- URLs amigáveis (ex.: /politica-de-privacidade sem .html) ------
+#  Mesmo comportamento do server.js (extensions: ['html']).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Se a URL pedida não é arquivo/pasta, mas existe o .html, serve-o.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>
+
+# --- Cache leve para imagens/estáticos (opcional, seguro) ----------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/png    "access plus 7 days"
+  ExpiresByType image/jpeg   "access plus 7 days"
+  ExpiresByType image/webp   "access plus 7 days"
+  ExpiresByType image/x-icon "access plus 30 days"
+</IfModule>
+
+# --- Compressão de texto (opcional, melhora o carregamento) --------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
