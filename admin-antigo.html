@@ -6,7 +6,7 @@
 <title>Admin — LFL Cuidado e Saúde</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --ink:#1E2B38; --ink-soft:#4A5D52; --bg:#F4F0EA; --card:#FFFFFF; --border:#E2DDD6; --cta:#C67A5C;
+  :root { --ink:#1E2B38; --ink-soft:#4a5a68; --bg:#F7F4EE; --card:#FFFFFF; --border:#E5DFD3; --cta:#C98B5E;
           --ok:#2e9e6b; --warn:#d99a2b; --err:#c0392b; --manual:#d97706; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--ink-soft); padding-bottom:120px; }
@@ -18,7 +18,7 @@
                  padding:12px 20px; cursor:pointer; border-radius:10px 10px 0 0; }
   .abas button.ativa { background:var(--bg); color:var(--ink); }
   .wrap { max-width:980px; margin:0 auto; padding:40px 24px; display:flex; flex-direction:column; gap:40px; }
-  .bloco { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; }
+  .bloco { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:28px; }
   .bloco h2 { font-family:'Playfair Display',serif; color:var(--ink); font-size:19px; margin-bottom:6px; }
   .bloco .dica { font-size:12.5px; color:#8a94a0; margin-bottom:20px; line-height:1.6; }
   label { display:block; font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); margin:16px 0 6px; }
@@ -34,23 +34,9 @@
   #editorPriv ul, #editorPriv ol { margin-left:22px; }
   .salvar { position:fixed; left:0; right:0; bottom:0; background:var(--ink); padding:16px 40px; display:flex; align-items:center; gap:18px; }
   .salvar button { background:var(--cta); color:#fff; border:0; border-radius:8px; padding:14px 32px; font:600 15px 'Inter',sans-serif; cursor:pointer; }
-  .salvar button:hover { background:#B5684C; }
+  .salvar button:hover { background:#b5794f; }
   .salvar small { color:rgba(255,255,255,.6); font-size:12.5px; line-height:1.5; }
   .ok { color:#7fc98b !important; }
-
-  /* ── Interruptores (Configurações da Página) ──────────────── */
-  .chaves { display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; }
-  @media (max-width:640px){ .chaves { grid-template-columns:1fr; } }
-  .chave { display:flex; align-items:center; justify-content:space-between; gap:12px;
-           background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:10px 14px; }
-  .chave span { font-size:13.5px; color:var(--ink); }
-  .chave small { display:block; font-size:11.5px; color:#8a94a0; }
-  .chave input { appearance:none; width:42px; height:24px; border-radius:12px; background:#cfc8bc;
-                 position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
-  .chave input:checked { background:var(--cta); }
-  .chave input::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px;
-                        border-radius:50%; background:#fff; transition:left .2s; }
-  .chave input:checked::after { left:21px; }
 
   /* ── Aba Pedidos & Pagamentos ─────────────────────────────── */
   .resumo { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-bottom:20px; }
@@ -75,7 +61,7 @@
   .login-caixa input { width:100%; border:1px solid var(--border); border-radius:8px; padding:12px; font:14px 'Inter',sans-serif; }
   .login-caixa input:focus { outline:2px solid var(--cta); border-color:transparent; }
   .botao { background:var(--cta); color:#fff; border:0; border-radius:8px; padding:12px 24px; font:600 14px 'Inter',sans-serif; cursor:pointer; margin-top:14px; }
-  .botao:hover { background:#B5684C; }
+  .botao:hover { background:#b5794f; }
   .botao.sec { background:transparent; color:var(--ink-soft); border:1px solid var(--border); }
   .aviso { border-radius:8px; padding:12px 14px; font-size:13px; line-height:1.6; margin-bottom:16px; display:none; }
   .aviso.erro { display:block; background:rgba(192,57,43,.08); color:var(--err); }
@@ -115,22 +101,6 @@
       <button type="button" data-cmd="insertOrderedList">1. Lista</button>
     </div>
     <div id="editorPriv" contenteditable="true"></div>
-  </div>
-  <div class="bloco">
-    <h2>Configurações da Página</h2>
-    <p class="dica">Ligue ou desligue cada bloco da página. As mudanças valem após baixar o <b>content.js</b> e substituí-lo no servidor — igual às frases da Jornada.</p>
-    <div class="chaves" id="chavesConfig">
-      <label class="chave"><span>Vídeo flutuante "A Jornada"<small>mini-player no canto, aparece ao rolar</small></span><input type="checkbox" data-cfg="videoFlutuante"></label>
-      <label class="chave"><span>Vídeo estático do burnout<small>moldura de celular no meio da página</small></span><input type="checkbox" data-cfg="videoBurnout" data-tipo="secao"></label>
-      <label class="chave"><span>Botão flutuante do WhatsApp</span><input type="checkbox" data-cfg="whatsappFlutuante"></label>
-      <label class="chave"><span>Cartão do médico<small>foto + CRM</small></span><input type="checkbox" data-cfg="medico" data-tipo="secao"></label>
-      <label class="chave"><span>"Você se identifica?"</span><input type="checkbox" data-cfg="identifica" data-tipo="secao"></label>
-      <label class="chave"><span>Cuidado Integral</span><input type="checkbox" data-cfg="cuidadoIntegral" data-tipo="secao"></label>
-      <label class="chave"><span>Método de Atendimento</span><input type="checkbox" data-cfg="metodo" data-tipo="secao"></label>
-      <label class="chave"><span>Frases da Jornada<small>seção com as frases editadas acima</small></span><input type="checkbox" data-cfg="jornada" data-tipo="secao"></label>
-      <label class="chave"><span>Consulta Online</span><input type="checkbox" data-cfg="consultaOnline" data-tipo="secao"></label>
-      <label class="chave"><span>Depoimentos</span><input type="checkbox" data-cfg="depoimentos" data-tipo="secao"></label>
-    </div>
   </div>
 </div>
 
@@ -198,23 +168,6 @@
   });
   var editor = document.getElementById('editorPriv');
   editor.innerHTML = C.privacidade || '';
-
-  // Configurações da Página: sem config salva, tudo começa LIGADO.
-  var cfgSalva = C.config || {};
-  var secoesSalvas = cfgSalva.secoes || {};
-  document.querySelectorAll('#chavesConfig input[data-cfg]').forEach(function (chk) {
-    var valor = chk.dataset.tipo === 'secao' ? secoesSalvas[chk.dataset.cfg] : cfgSalva[chk.dataset.cfg];
-    chk.checked = valor !== false;
-  });
-
-  function lerConfig() {
-    var config = { secoes: {} };
-    document.querySelectorAll('#chavesConfig input[data-cfg]').forEach(function (chk) {
-      if (chk.dataset.tipo === 'secao') config.secoes[chk.dataset.cfg] = chk.checked;
-      else config[chk.dataset.cfg] = chk.checked;
-    });
-    return config;
-  }
   document.querySelectorAll('.toolbar button').forEach(function (b) {
     b.addEventListener('click', function () {
       if (b.dataset.cmd) document.execCommand(b.dataset.cmd, false, null);
@@ -229,7 +182,7 @@
         p: document.querySelector('textarea[data-i="' + i + '"][data-k="p"]').value
       };
     });
-    var out = 'window.SITE_CONTENT = ' + JSON.stringify({ jornada: jornada, privacidade: editor.innerHTML, config: lerConfig() }, null, 2) + ';\n';
+    var out = 'window.SITE_CONTENT = ' + JSON.stringify({ jornada: jornada, privacidade: editor.innerHTML }, null, 2) + ';\n';
     var blob = new Blob([out], { type: 'text/javascript' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
