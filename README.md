@@ -8,6 +8,13 @@ e celular). Continua funcionando também como site 100% estático.
 
 **Página inicial:** `index.html`
 
+> **Publicando na Hostinger?** Leia o [`RESTAURACAO-AGENDAMENTO.md`](RESTAURACAO-AGENDAMENTO.md)
+> — ele explica o mapa dos dois sistemas (site × agendamento), por que os
+> acentos/subpáginas/vídeos quebraram no upload e como restaurar o subdomínio
+> de agendamento. **Importante:** ao subir os arquivos, inclua o `.htaccess`
+> (arquivo oculto) — ele corrige o charset (acentos), o tipo dos `.jsx` (vídeos)
+> e as URLs amigáveis das subpáginas.
+
 ---
 
 ## 1. Estrutura de arquivos
