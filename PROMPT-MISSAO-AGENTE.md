@@ -85,6 +85,14 @@ agendamento via proxy interno `/api/agendamento/*` do server.js do site).
 
 Estado conhecido: `agendamento.clinicalorenci.com.br` **não resolve no DNS**.
 
+> **PISTA IMPORTANTE do Luiz (16/07/2026):** a versão que "funcionava super
+> bem" respondia em **`http://76.13.169.14:8081/`**. Antes de qualquer
+> redeploy, verifique o que atende nessa porta (`curl -s http://76.13.169.14:8081/`
+> e `docker ps` na VPS): é muito provável que o app de agendamento esteja
+> **rodando e saudável**, faltando apenas o DNS do subdomínio e o domínio+SSL
+> no Coolify apontando para esse container. Se for isso, a Fase 1 se resume a
+> religar essas duas pontes — não mexa no app que já funciona (regra R2/R6).
+
 1. DNS (painel Hostinger): crie/corrija o registro **A** `agendamento` →
    `76.13.169.14` (TTL baixo, 300–3600s).
 2. Coolify: confirme que o app `agendamento` está **running** e que o domínio
